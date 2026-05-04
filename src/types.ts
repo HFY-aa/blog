@@ -36,4 +36,11 @@ export interface ResumeData {
     degree: string;
     year: string;
   }[];
+  volunteer: {
+    title: string;
+    category: string;
+    period: string;
+    description: string;
+    photos?: string[];
+  }[];
 }
