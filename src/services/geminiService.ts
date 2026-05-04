@@ -1,7 +1,17 @@
 import { GoogleGenAI } from "@google/genai";
 import { RESUME_DATA } from "../constants";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const apiKey = import.meta.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY;
+
+let ai: any = null;
+
+if (apiKey) {
+  try {
+    ai = new GoogleGenAI({ apiKey });
+  } catch (e) {
+    console.error("Failed to initialize Gemini:", e);
+  }
+}
 
 const SYSTEM_INSTRUCTION = `
 你现在是 ${RESUME_DATA.name} 的个人简历助手。
@@ -17,6 +27,9 @@ ${JSON.stringify(RESUME_DATA, null, 2)}
 `;
 
 export async function chatWithResume(message: string, history: any[] = []) {
+  if (!ai) {
+    return "抱歉，AI 助手尚未配置 API Key。请在环境变量中设置 VITE_GEMINI_API_KEY。";
+  }
   try {
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",

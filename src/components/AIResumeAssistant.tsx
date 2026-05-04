@@ -29,15 +29,13 @@ export const AIResumeAssistant: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const history = messages.map(msg => ({
+      const response = await chatWithResume(userMessage, messages.map(msg => ({
         role: msg.role,
         parts: [{ text: msg.text }]
-      }));
-      
-      const response = await chatWithResume(userMessage, history);
+      })));
       setMessages(prev => [...prev, { role: 'model', text: response || 'EMPTY_RESPONSE_ERROR' }]);
     } catch (error) {
-      setMessages(prev => [...prev, { role: 'model', text: 'CONNECTION_FAILED: 请检查后端连接。' }]);
+      setMessages(prev => [...prev, { role: 'model', text: 'CONNECTION_FAILED: 请检查 API KEY 配置或网络状况。' }]);
     } finally {
       setIsLoading(false);
     }
