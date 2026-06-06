@@ -4,31 +4,40 @@ import { Github, Linkedin, Mail, Phone, MapPin, ExternalLink, Briefcase, Graduat
 import { RESUME_DATA } from './constants';
 import { AIResumeAssistant } from './components/AIResumeAssistant';
 
+// Glob all images under public/assets/volunteer recursively
+const allImages = import.meta.glob('/public/assets/volunteer/**/*.{jpg,jpeg,png,gif,webp,JPG,JPEG,PNG,GIF,WEBP}', { eager: true });
+
+const STATIC_PHOTOS: Record<string, string[]> = {};
+
+Object.keys(allImages).forEach((key) => {
+  const parts = key.split('/');
+  // parts will look like ["", "public", "assets", "volunteer", "category-name", "filename.jpg"]
+  const category = parts[4];
+  const fileName = parts[5];
+  if (category && fileName) {
+    if (!STATIC_PHOTOS[category]) {
+      STATIC_PHOTOS[category] = [];
+    }
+    // We serve the public assets under /assets dir
+    STATIC_PHOTOS[category].push(`/assets/volunteer/${category}/${fileName}`);
+  }
+});
+
 function VolunteerItem({ v, onOpenGallery }: { v: any, onOpenGallery: (photos: string[]) => void }) {
-  const [photos, setPhotos] = React.useState<string[]>([]);
+  const photos = React.useMemo(() => {
+    return STATIC_PHOTOS[v.category] || [];
+  }, [v.category]);
+
   const [displayPhotos, setDisplayPhotos] = React.useState<string[]>([]);
-  const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
-    async function fetchPhotos() {
-      setLoading(true);
-      try {
-        const res = await fetch(`/api/photos/${v.category}`);
-        const data = await res.json();
-        if (data.photos) {
-          setPhotos(data.photos);
-          // Initial selection: take up to 5
-          const shuffled = [...data.photos].sort(() => 0.5 - Math.random());
-          setDisplayPhotos(shuffled.slice(0, 5));
-        }
-      } catch (err) {
-        console.error('Failed to fetch photos', err);
-      } finally {
-        setLoading(false);
-      }
+    if (photos.length > 0) {
+      const shuffled = [...photos].sort(() => 0.5 - Math.random());
+      setDisplayPhotos(shuffled.slice(0, 5));
+    } else {
+      setDisplayPhotos([]);
     }
-    fetchPhotos();
-  }, [v.category]);
+  }, [photos]);
 
   const shufflePhotos = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -48,7 +57,7 @@ function VolunteerItem({ v, onOpenGallery }: { v: any, onOpenGallery: (photos: s
               <Rocket size={14} className="text-brand-neon" />
               <span className="font-mono text-[10px] text-white/70">{v.period}</span>
             </div>
-            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2">
               {photos.length > 5 && (
                 <button 
                   onClick={shufflePhotos}
@@ -60,7 +69,7 @@ function VolunteerItem({ v, onOpenGallery }: { v: any, onOpenGallery: (photos: s
               )}
               <div className="flex items-center gap-1.5 px-2 py-0.5 bg-brand-neon/10 border border-brand-neon/20 rounded font-mono text-[8px] text-brand-neon">
                 <ImageIcon size={10} />
-                {loading ? 'SYNCING...' : `${photos.length} RECORDS`}
+                {photos.length > 0 ? `${photos.length} RECORDS` : '0 RECORDS'}
               </div>
             </div>
          </div>
