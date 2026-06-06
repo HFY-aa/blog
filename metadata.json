@@ -2,5 +2,7 @@
   "name": "AI Product Resume",
   "description": "A high-end, AI-powered personal portfolio and resume tailored for AI Product roles, featuring an interactive AI assistant.",
   "requestFramePermissions": [],
-  "majorCapabilities": []
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }
