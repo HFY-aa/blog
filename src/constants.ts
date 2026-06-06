@@ -3,7 +3,7 @@ import { ResumeData } from './types';
 export const RESUME_DATA: ResumeData = {
   name: "黄芳艳 (Huang Fangyan)",
   title: "AI 产品经理 / 数字化产品实习生",
-  bio: "关注 AI 技术在业务场景的实际落地，致力于将复杂逻辑转化为易用的数字化产品。拥有知名车企产品实习经验，具备扎实的 PRD 编写与跨部门协作能力，热衷于通过技术普惠缩减数字鸿沟。",
+  bio: "一个持续阅读和思考的人，正在 AI 时代里寻找技术、问题与自我成长的连接点。",
   email: "1115451581@qq.com",
   phone: "18087578615",
   location: "上海 / 西安",
@@ -21,11 +21,7 @@ export const RESUME_DATA: ResumeData = {
       company: "蔚来 (NIO)",
       role: "TO B 数字化产品",
       period: "2026.01 - 2026.04",
-      description: [
-        "负责 PPAP Audit Agent 业务场景落地。通过对接业务端需求，主导撰写并产出 24万字 数字化产品手册及用户指南。",
-        "从 0 到 1 设计并搭建智能对话客服 Agent。梳理业务解答路径，构建结构化 RAG 知识库，实现了业务咨询的自动化应答。",
-        "协助建立痛点捕捉机制，统筹研发与业务端的信息同步，持续优化内部 AI 产品的迭代链路。"
-      ],
+      description: [],
     },
     {
       company: "智咖教育",
